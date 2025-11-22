@@ -1,0 +1,7 @@
+ApocalipsisApp/node_modules/
+ApocalipsisApp/package-lock.json
+ApocalipsisApp/.env
+ApocalipsisApp/package.json
+ApocalipsisApp/tsconfig.json
+ApocalipsisApp/tsconfig.node.json
+ApocalipsisApp/tsconfig.app.json
