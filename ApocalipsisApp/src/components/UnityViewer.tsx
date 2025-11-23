@@ -17,7 +17,6 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const speedPresets = [0.1, 0.5, 1, 2, 5, 10, 50, 100, 500, 1000];
 
   const handleReset = () => {
     onSpeedChange(1);
@@ -136,6 +135,34 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
         </div>
       </div>
 
+      {/* Unity Communication Info */}
+      <div className="bg-gradient-to-br from-slate-900/50 to-blue-950/30 backdrop-blur-xl border border-blue-500/20 rounded-xl p-4">
+        <h3 className="text-sm mb-3 text-blue-300">Estructura de datos Unity → React</h3>
+        <div className="bg-slate-950/50 rounded-lg p-4 font-mono text-xs text-gray-300 overflow-x-auto">
+          <pre>{`// Enviar desde Unity (C#):
+Application.ExternalCall("postMessage", JsonUtility.ToJson(
+  new {
+    type = "asteroids_data",
+    asteroids = new[] {
+      new {
+        id = "433",
+        name = "433 Eros",
+        diameter = 16.84,
+        velocity = 24.36,
+        missDistance = 26758428,
+        hazardous = true,
+        closeApproachDate = "2025-01-31",
+        magnitude = 10.4,
+        type = "asteroid"
+      }
+    }
+  }
+));
+
+// React recibe automáticamente y actualiza la UI`}</pre>
+        </div>
+      </div>
+
       {/* Simulation Speed Controls */}
       <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-6 py-4 border-b border-blue-500/20">
@@ -166,60 +193,9 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
               className="w-full"
             />
 
-            {/* Speed Presets */}
-            <div className="grid grid-cols-5 gap-2">
-              {speedPresets.map((preset) => (
-                <Button
-                  key={preset}
-                  onClick={() => onSpeedChange(preset)}
-                  variant={simulationSpeed === preset ? "default" : "outline"}
-                  size="sm"
-                  className={`text-xs h-8 ${
-                    simulationSpeed === preset 
-                      ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30" 
-                      : "border-blue-800/50 hover:bg-blue-950/50 hover:border-blue-600"
-                  }`}
-                >
-                  {preset}x
-                </Button>
-              ))}
-            </div>
+            
           </div>
 
-          <Separator className="bg-blue-900/30" />
-
-          {/* Playback Controls */}
-          <div className="space-y-3">
-            <label className="text-sm text-gray-300">Controles de reproducción</label>
-            <div className="flex gap-2">
-              <Button
-                onClick={onPauseToggle}
-                size="lg"
-                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/30 h-12"
-              >
-                {isPaused ? (
-                  <>
-                    <Play className="w-5 h-5 mr-2 fill-current" />
-                    Reproducir
-                  </>
-                ) : (
-                  <>
-                    <Pause className="w-5 h-5 mr-2" />
-                    Pausar
-                  </>
-                )}
-              </Button>
-              
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                size="lg"
-                className="border-blue-700/50 hover:bg-blue-950/50 hover:border-blue-600 h-12 px-4"
-              >
-                <RotateCcw className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

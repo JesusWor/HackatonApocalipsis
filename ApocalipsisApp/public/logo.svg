@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Earth -->
+  <circle cx="70" cy="120" r="45" fill="none" stroke="#4BA3FF" stroke-width="6"></circle>
+
+  <!-- Trajectory -->
+  <path d="M170 40 C140 80 110 100 80 115" fill="none" stroke="#FFD166" stroke-width="5" stroke-linecap="round"></path>
+
+  <!-- Asteroid -->
+  <circle cx="170" cy="40" r="10" fill="#FF7B7B"></circle>
+
+  <!-- Small impact mark -->
+  <circle cx="80" cy="115" r="4" fill="#FFD166"></circle>
+
+  <!-- Text -->
+  <text x="50" y="185" font-family="Arial, sans-serif" font-size="26" fill="#ffffff">
+    Upiter
+  </text>
+</svg>

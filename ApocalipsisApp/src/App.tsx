@@ -1,15 +1,36 @@
 import { useState, useEffect } from 'react';
-import { UnityViewer } from './components/UnityViewer';
+import { SpaceSimulation } from './components/SpaceSimulation';
 import { ControlPanel } from './components/ControlPanel';
-import type { Asteroid } from './types/asteroid';
+import { useNASAData } from '../Server/server';
+
+export interface Asteroid {
+  id: string;
+  name: string;
+  diameter: number; // km
+  velocity: number; // km/s
+  missDistance: number; // km
+  hazardous: boolean;
+  closeApproachDate: string;
+  magnitude: number;
+  type: 'asteroid' | 'comet';
+}
 
 export default function App() {
-  const [simulationSpeed, setSimulationSpeed] = useState(1);
+  const [simulationSpeed, setSimulationSpeed] = useState(10); // Velocidad inicial 10x
   const [isPaused, setIsPaused] = useState(false);
   const [objectType, setObjectType] = useState<'all' | 'asteroid' | 'comet'>('all');
+  const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
+  
+  // Obtener datos de NASA
+  const { asteroids: nasaAsteroids, loading, error } = useNASAData();
   const [asteroids, setAsteroids] = useState<Asteroid[]>([]);
 
-  // Escuchar mensajes de Unity con datos de asteroides
+  // Actualizar asteroides cuando llegan datos
+  useEffect(() => {
+    setAsteroids(nasaAsteroids);
+  }, [nasaAsteroids]);
+
+  // Escuchar mensajes de Unity (por si se integra más adelante)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === 'asteroids_data') {
@@ -61,12 +82,13 @@ export default function App() {
 
           {/* Unity Viewer - Right Side */}
           <div className="lg:col-span-8 xl:col-span-9">
-            <UnityViewer 
+            <SpaceSimulation 
               simulationSpeed={simulationSpeed}
               isPaused={isPaused}
               objectType={objectType}
               onSpeedChange={setSimulationSpeed}
               onPauseToggle={() => setIsPaused(!isPaused)}
+              asteroids={asteroids}
             />
           </div>
         </div>
