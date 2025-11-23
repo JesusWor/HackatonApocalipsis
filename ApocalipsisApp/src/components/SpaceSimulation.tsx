@@ -45,7 +45,6 @@ export function SpaceSimulation({
     animationId: number | null;
   } | null>(null);
 
-  const speedPresets = [0.1, 0.5, 1, 2, 5, 10, 50, 100, 500, 1000];
 
   const handleReset = () => {
     onSpeedChange(1);
@@ -378,8 +377,8 @@ export function SpaceSimulation({
           </h2>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Speed Slider */}
+        {/* <div className="p-6 space-y-6">
+          {/* Speed Slider 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="text-sm text-gray-300">
@@ -398,26 +397,7 @@ export function SpaceSimulation({
               step={0.1}
               className="w-full"
             />
-
-            {/* Speed Presets */}
-            <div className="grid grid-cols-5 gap-2">
-              {speedPresets.map((preset) => (
-                <Button
-                  key={preset}
-                  onClick={() => onSpeedChange(preset)}
-                  variant={simulationSpeed === preset ? "default" : "outline"}
-                  size="sm"
-                  className={`text-xs h-8 ${
-                    simulationSpeed === preset 
-                      ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30" 
-                      : "border-blue-800/50 hover:bg-blue-950/50 hover:border-blue-600"
-                  }`}
-                >
-                  {preset}x
-                </Button>
-              ))}
-            </div>
-          </div>
+          </div> */}
 
           <Separator className="bg-blue-900/30" />
 
@@ -455,6 +435,5 @@ export function SpaceSimulation({
           </div>
         </div>
       </div>
-    </div>
   );
 }

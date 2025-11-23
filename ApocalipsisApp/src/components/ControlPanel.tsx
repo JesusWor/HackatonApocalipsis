@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Filter } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
@@ -5,21 +6,7 @@ import { Card } from './ui/card';
 import { AsteroidDetailCard } from './AsteroidDetailCard';
 import type { AsteroidOrbitalData } from './AsteroidDetailCard';
 import { AsteroidDashboard } from './AsteroidDashboard';
-
-import { useState } from 'react';
-
-export interface Asteroid {
-  id: string;
-  name: string;
-  diameter: number; // km
-  velocity: number; // km/s
-  missDistance: number; // km
-  hazardous: boolean;
-  closeApproachDate: string;
-  magnitude: number;
-  type: 'asteroid' | 'comet';
-}
-
+import type { Asteroid } from '../types/asteroid';
 
 interface ControlPanelProps {
   objectType: 'all' | 'asteroid' | 'comet';
@@ -34,13 +21,13 @@ export function ControlPanel({
 }: ControlPanelProps) {
   const [selectedAsteroid, setSelectedAsteroid] = useState<Asteroid | null>(null);
 
-  const filteredAsteroids = asteroids.filter(asteroid => 
+  const filteredAsteroids = asteroids.filter(asteroid =>
     objectType === 'all' || asteroid.type === objectType
   );
 
   const hazardousCount = filteredAsteroids.filter(a => a.hazardous).length;
 
-  // Datos orbitales de ejemplo para Bennu (el más famoso)
+  // Datos orbitales de ejemplo para Bennu
   const bennuOrbitalData: AsteroidOrbitalData = {
     epoch: "2455562.5",
     e: "0.204",
@@ -59,7 +46,7 @@ export function ControlPanel({
       {selectedAsteroid && (
         <AsteroidDetailCard
           name={selectedAsteroid.name}
-          imageUrl={selectedAsteroid.id === '101955' 
+          imageUrl={selectedAsteroid.id === '101955'
             ? 'https://wp.technologyreview.com/wp-content/uploads/2020/10/BennuAsteroid.jpg'
             : 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=800'}
           orbitalData={bennuOrbitalData}
@@ -71,54 +58,12 @@ export function ControlPanel({
         />
       )}
 
-      {/* Main Control Card */}
+{/* Dashboard extra */}
       <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-6 py-4 border-b border-blue-500/20">
-          <h2 className="flex items-center gap-2 text-lg">
-            <Filter className="w-5 h-5 text-blue-400" />
-            Filtros
-          </h2>
-          <p className="text-xs text-blue-300/60 mt-1">Configuración de visualización</p>
-        </div>
-
-        <div className="p-6 space-y-6">
-          {/* Object Type Filter */}
-          <div className="space-y-3">
-            <label className="text-sm text-gray-300 flex items-center justify-between">
-              Tipo de objeto
-              <Badge variant="outline" className="bg-blue-950/50 border-blue-700 text-xs">
-                {filteredAsteroids.length} objetos
-              </Badge>
-            </label>
-            <Select value={objectType} onValueChange={onObjectTypeChange}>
-              <SelectTrigger className="bg-slate-950/50 border-blue-700/50 h-12">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-blue-700/50">
-                <SelectItem value="all">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-400"></div>
-                    Todos los objetos
-                  </div>
-                </SelectItem>
-                <SelectItem value="asteroid">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-orange-400"></div>
-                    Solo asteroides
-                  </div>
-                </SelectItem>
-                <SelectItem value="comet">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
-                    Solo cometas
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <AsteroidDashboard />
         </div>
       </div>
-
       {/* Asteroids List */}
       <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-6 py-4 border-b border-blue-500/20">
@@ -168,6 +113,8 @@ export function ControlPanel({
           )}
         </div>
       </div>
+
+      
     </div>
   );
 }
