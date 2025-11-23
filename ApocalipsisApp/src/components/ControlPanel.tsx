@@ -24,7 +24,7 @@ export function ControlPanel({
   return (
     <div className="space-y-6">
       {/* Main Control Card */}
-      <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
+      {/* <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-6 py-4 border-b border-blue-500/20">
           <h2 className="flex items-center gap-2 text-lg">
             <Filter className="w-5 h-5 text-blue-400" />
@@ -33,9 +33,9 @@ export function ControlPanel({
           <p className="text-xs text-blue-300/60 mt-1">Configuración de visualización</p>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6"> */}
           {/* Object Type Filter */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <label className="text-sm text-gray-300 flex items-center justify-between">
               Tipo de objeto
               <Badge variant="outline" className="bg-blue-950/50 border-blue-700 text-xs">
@@ -68,8 +68,8 @@ export function ControlPanel({
               </SelectContent>
             </Select>
           </div>
-        </div>
-      </div>
+        </div> 
+      </div>*/}
 
       {/* Asteroids List */}
       <div className="bg-slate-900/50 backdrop-blur-xl border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">

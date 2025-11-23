@@ -94,15 +94,6 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
                 <Loader2 className="w-10 h-10 text-white animate-spin" />
               </div>
 
-              <div>
-                <h3 className="text-2xl mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                  Unity WebGL Integration
-                </h3>
-                <p className="text-blue-300/80">
-                  Aquí se cargará tu visualización 3D de Unity
-                </p>
-              </div>
-
               {/* Current State */}
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div className="bg-blue-950/30 border border-blue-700/30 rounded-lg p-3">
@@ -171,7 +162,7 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
           <Separator className="bg-blue-900/30" />
 
           {/* Playback Controls */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <label className="text-sm text-gray-300">Controles de reproducción</label>
             <div className="flex gap-2">
               <Button
@@ -201,7 +192,7 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
                 <RotateCcw className="w-5 h-5" />
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

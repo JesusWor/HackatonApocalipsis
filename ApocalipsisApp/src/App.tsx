@@ -48,7 +48,7 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto py-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Control Panel - Left Side */}
           <div className="lg:col-span-4 xl:col-span-3">
