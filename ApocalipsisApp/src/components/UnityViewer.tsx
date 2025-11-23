@@ -124,7 +124,7 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
           </div>
 
           {/* Iframe para Unity (descomenta cuando tengas el build) */}
-          {/* 
+          
           <iframe
             ref={iframeRef}
             src="/unity/index.html"
@@ -132,7 +132,7 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
             title="Unity Asteroid Simulation"
             allow="fullscreen; autoplay"
           />
-          */}
+         
         </div>
       </div>
 
@@ -160,30 +160,12 @@ export function UnityViewer({ simulationSpeed, isPaused, objectType, onSpeedChan
             <Slider
               value={[simulationSpeed]}
               onValueChange={(values) => onSpeedChange(values[0])}
-              min={0.1}
+              min={-1000}
               max={1000}
-              step={0.1}
+              step={1}
               className="w-full"
             />
 
-            {/* Speed Presets */}
-            <div className="grid grid-cols-5 gap-2">
-              {speedPresets.map((preset) => (
-                <Button
-                  key={preset}
-                  onClick={() => onSpeedChange(preset)}
-                  variant={simulationSpeed === preset ? "default" : "outline"}
-                  size="sm"
-                  className={`text-xs h-8 ${
-                    simulationSpeed === preset 
-                      ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30" 
-                      : "border-blue-800/50 hover:bg-blue-950/50 hover:border-blue-600"
-                  }`}
-                >
-                  {preset}x
-                </Button>
-              ))}
-            </div>
           </div>
 
           <Separator className="bg-blue-900/30" />
