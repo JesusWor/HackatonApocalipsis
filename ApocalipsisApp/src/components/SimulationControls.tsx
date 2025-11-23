@@ -75,35 +75,13 @@ export function SimulationControls({
           <Slider
             value={[speed]}
             onValueChange={(values) => onSpeedChange(values[0])}
-            min={0.1}
+            min={-1000}
             max={1000}
-            step={0.1}
+            step={1}
             className="w-full"
           />
         </div>
 
-        {/* Speed Presets */}
-        <div className="space-y-2">
-          <label className="text-sm text-gray-300">Presets rápidos:</label>
-          <div className="grid grid-cols-5 gap-2">
-            {speedPresets.map((preset) => (
-              <Button
-                key={preset}
-                onClick={() => onSpeedChange(preset)}
-                variant={speed === preset ? "default" : "outline"}
-                size="sm"
-                className={speed === preset ? "bg-blue-600" : "border-blue-800 hover:bg-blue-950"}
-              >
-                {preset}x
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Info */}
-        <div className="text-xs text-gray-400 p-3 bg-black/30 rounded">
-          <p>💡 Tip: Aumenta la velocidad para ver órbitas más rápido, o disminúyela para observar detalles.</p>
-        </div>
       </div>
     </div>
   );

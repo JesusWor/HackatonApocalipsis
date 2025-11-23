@@ -1,116 +1,103 @@
-import { AlertTriangle, Maximize2, Gauge, Calendar } from 'lucide-react';
-import { Badge } from './ui/badge';
-import { Card } from './ui/card';
+import React, { useState } from 'react'
 
-interface Asteroid {
-  id: string;
-  name: string;
-  diameter: number;
-  velocity: number;
-  missDistance: number;
-  hazardous: boolean;
-  closeApproachDate: string;
-  magnitude: number;
+const ERROR_IMG_SRC =
+  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODgiIGhlaWdodD0iODgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBvcGFjaXR5PSIuMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIzLjciPjxyZWN0IHg9IjE2IiB5PSIxNiIgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiByeD0iNiIvPjxwYXRoIGQ9Im0xNiA1OCAxNi0xOCAzMiAzMiIvPjxjaXJjbGUgY3g9IjUzIiBjeT0iMzUiIHI9IjciLz48L3N2Zz4KCg=='
+
+export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElement>) {
+  const [didError, setDidError] = useState(false)
+
+  const handleError = () => {
+    setDidError(true)
+  }
+
+  const { src, alt, style, className, ...rest } = props
+
+  return didError ? (
+    <div
+      className={`inline-block bg-gray-100 text-center align-middle ${className ?? ''}`}
+      style={style}
+    >
+      <div className="flex items-center justify-center w-full h-full">
+        <img src={ERROR_IMG_SRC} alt="Error loading image" {...rest} data-original-url={src} />
+      </div>
+    </div>
+  ) : (
+    <img src={src} alt={alt} className={className} style={style} {...rest} onError={handleError} />
+  )
+}
+
+export interface AsteroidOrbitalData {
+  epoch: string; // Epoch osculation
+  e: string; // Eccentricity
+  a: string; // Semi major axis
+  i: string; // Inclination
+  om: string; // Longitude of the ascending node
+  per: string; // Orbital period
+  w: string; // Argument of perihelion
+  M: string; // Mean anomaly
+  n: string; // Mean motion
 }
 
 interface AsteroidCardProps {
-  asteroid: Asteroid;
-  rank: number;
-  isSelected: boolean;
-  onSelect: () => void;
+  name: string;
+  imageUrl: string;
+  orbitalData: AsteroidOrbitalData;
+  isPotentiallyHazardous?: boolean;
 }
 
-export function AsteroidCard({ asteroid, rank, isSelected, onSelect }: AsteroidCardProps) {
-  const formatDistance = (km: number) => {
-    if (km > 1000000) {
-      return `${(km / 1000000).toFixed(2)} M km`;
-    }
-    return `${km.toLocaleString()} km`;
-  };
-
-  const getRiskLevel = (distance: number, hazardous: boolean) => {
-    if (!hazardous) return { label: 'Bajo', color: 'bg-green-500' };
-    if (distance < 5000000) return { label: 'Alto', color: 'bg-red-500' };
-    if (distance < 20000000) return { label: 'Medio', color: 'bg-orange-500' };
-    return { label: 'Bajo', color: 'bg-yellow-500' };
-  };
-
-  const risk = getRiskLevel(asteroid.missDistance, asteroid.hazardous);
+export function AsteroidCard({ name, imageUrl, orbitalData, isPotentiallyHazardous }: AsteroidCardProps) {
+  const orbitalFields = [
+    { label: "Época", value: orbitalData.epoch, unit: "" },
+    { label: "Excentricidad", value: orbitalData.e, unit: "" },
+    { label: "Semi-eje mayor", value: orbitalData.a, unit: "AU" },
+    { label: "Inclinación", value: orbitalData.i, unit: "°" },
+    { label: "Long. nodo ascendente", value: orbitalData.om, unit: "°" },
+    { label: "Período orbital", value: orbitalData.per, unit: "días" },
+    { label: "Arg. del perihelio", value: orbitalData.w, unit: "°" },
+    { label: "Anomalía media", value: orbitalData.M, unit: "°" },
+    { label: "Movimiento medio", value: orbitalData.n, unit: "°/día" }
+  ];
 
   return (
-    <Card
-      className={`p-4 cursor-pointer transition-all duration-200 border ${
-        isSelected
-          ? 'bg-blue-950/70 border-blue-500 shadow-lg shadow-blue-500/20'
-          : 'bg-gradient-to-br from-blue-950/30 to-purple-950/20 border-blue-900/30 hover:border-blue-700/50'
-      }`}
-      onClick={onSelect}
-    >
-      <div className="space-y-3">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-2">
-            <Badge variant="outline" className="bg-blue-950/50 border-blue-700">
-              #{rank}
-            </Badge>
-            <div className="flex-1">
-              <h3 className="text-sm leading-tight mb-1">{asteroid.name}</h3>
-              <p className="text-xs text-gray-400">ID: {asteroid.id}</p>
-            </div>
+    <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 group">
+      {/* Image Section */}
+      <div className="relative aspect-video bg-slate-900/50 overflow-hidden">
+        <ImageWithFallback
+          src={imageUrl}
+          alt={name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        {isPotentiallyHazardous && (
+          <div className="absolute top-3 right-3 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full">
+            <span className="text-xs">⚠ Peligroso</span>
           </div>
-          {asteroid.hazardous && (
-            <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0" />
-          )}
-        </div>
-
-        {/* Risk Badge */}
-        <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${risk.color}`} />
-          <span className="text-xs text-gray-300">Riesgo: {risk.label}</span>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3 text-xs">
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-gray-400">
-              <Maximize2 className="w-3 h-3" />
-              <span>Diámetro</span>
-            </div>
-            <p className="text-blue-300">{asteroid.diameter.toFixed(2)} km</p>
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-gray-400">
-              <Gauge className="w-3 h-3" />
-              <span>Velocidad</span>
-            </div>
-            <p className="text-blue-300">{asteroid.velocity.toFixed(2)} km/s</p>
-          </div>
-
-          <div className="space-y-1">
-            <div className="text-gray-400">Distancia mínima</div>
-            <p className="text-blue-300">{formatDistance(asteroid.missDistance)}</p>
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-center gap-1 text-gray-400">
-              <Calendar className="w-3 h-3" />
-              <span>Aproximación</span>
-            </div>
-            <p className="text-blue-300">
-              {new Date(asteroid.closeApproachDate).getFullYear()}
-            </p>
-          </div>
-        </div>
-
-        {/* Magnitude */}
-        <div className="pt-2 border-t border-blue-900/30">
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-gray-400">Magnitud absoluta</span>
-            <span className="text-blue-300">{asteroid.magnitude}</span>
-          </div>
+        )}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent p-4">
+          <h3 className="text-lg text-white">{name}</h3>
         </div>
       </div>
-    </Card>
+
+      {/* Orbital Data Section */}
+      <div className="p-4 space-y-2">
+        <div className="mb-3">
+          <h4 className="text-sm text-blue-400 mb-2">Datos Orbitales</h4>
+          <div className="h-px bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-2">
+          {orbitalFields.map((field, index) => (
+            <div 
+              key={index} 
+              className="flex justify-between items-center py-1.5 px-2 rounded-lg bg-slate-900/30 hover:bg-slate-900/50 transition-colors"
+            >
+              <span className="text-xs text-slate-400">{field.label}</span>
+              <span className="text-xs text-white">
+                {field.value} {field.unit && <span className="text-slate-500">{field.unit}</span>}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
